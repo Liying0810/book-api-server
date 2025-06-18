@@ -7,7 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' })); // ⬅️ Add limit in case large payload
+app.use(express.urlencoded({ extended: true }));
+
 
 // MongoDB connect
 mongoose.connect(process.env.MONGODB_URI)

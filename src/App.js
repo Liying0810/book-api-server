@@ -20,13 +20,13 @@ const saveBook = async (book) => {
     note: ''
   };
 
-  await axios.post('https://book-api-server.onrender.com/api/books', bookData);
+  await axios.post('https://book-api-server-bm8l.onrender.com/api/books', bookData);
   loadSavedBooks();
 };
 
 
   const loadSavedBooks = async () => {
-    const res = await axios.get('https://book-api-server.onrender.com/api/books');
+    const res = await axios.get('https://book-api-server-bm8l.onrender.com/api/books');
     setSavedBooks(res.data);
   };
 

@@ -6,28 +6,21 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-app.use(cors({
-  origin: '*', // allow all (for testing) — or replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
-}));
-app.use(express.json({ limit: '2mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(express.json());
 
-// MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ MongoDB connected'))
-.catch((err) => console.error('❌ MongoDB error:', err));
+// 💬 Log ALL incoming POSTs for debugging
+app.post('*', (req, res, next) => {
+  console.log('📬 Received POST request to:', req.originalUrl);
+  console.log('📦 Body:', req.body);
+  next();
+});
 
 // Routes
 const bookRoutes = require('./routes/bookRoutes');
 app.use('/api/books', bookRoutes);
 
-// Default
-app.get('/', (req, res) => res.send('API running'));
+// Default route
+app.get('/', (req, res) => res.send('API is running'));
 
 app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
-

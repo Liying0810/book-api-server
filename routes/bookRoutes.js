@@ -1,30 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const Book = require('../models/Book'); // adjust path if needed
+const Book = require('../models/Book');
 
-// GET all books
+// Create
+router.post('/', async (req, res) => {
+  try {
+    const book = new Book(req.body);
+    await book.save();
+    res.status(201).json(book);
+  } catch (error) {
+    console.error('POST error:', error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read
 router.get('/', async (req, res) => {
   try {
     const books = await Book.find();
     res.json(books);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// POST save book
-router.post('/', async (req, res) => {
-  console.log('📥 POST /api/books body:', req.body); // ✅ log received data
-
-  try {
-    const newBook = new Book(req.body);
-    const saved = await newBook.save();
-    res.status(201).json(saved);
-  } catch (err) {
-    console.error('❌ Error saving book:', err.message);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
 module.exports = router;
+
 

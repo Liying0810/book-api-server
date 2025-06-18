@@ -12,17 +12,25 @@ function App() {
   };
 
 const saveBook = async (book) => {
-  const bookData = {
-    title: book.volumeInfo.title || 'No title',
-    authors: book.volumeInfo.authors || ['Unknown author'],
-    description: book.volumeInfo.description || 'No description',
-    thumbnail: book.volumeInfo.imageLinks?.thumbnail || '',
-    note: ''
-  };
+  const title = book?.volumeInfo?.title || 'No title';
+  const authors = book?.volumeInfo?.authors || ['Unknown author'];
+  const description = book?.volumeInfo?.description || 'No description';
+  const thumbnail = book?.volumeInfo?.imageLinks?.thumbnail || '';
 
-  await axios.post('https://book-api-server-bm8l.onrender.com/api/books', bookData);
-  loadSavedBooks();
+  const bookData = { title, authors, description, thumbnail, note: '' };
+
+  console.log("🧪 Save button clicked for:", title);
+  console.log("📦 Sending book data:", bookData);
+
+  try {
+    const res = await axios.post('https://book-api-server-bm8l.onrender.com/api/books', bookData);
+    console.log("✅ Saved:", res.data);
+    await loadSavedBooks();
+  } catch (error) {
+    console.error('❌ Save failed:', error.response?.data || error.message);
+  }
 };
+
 
 
   const loadSavedBooks = async () => {
